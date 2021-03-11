@@ -1,0 +1,71 @@
+<mat-card class="mat-card-data">
+  <mat-card-content class="mat-elevation-z8 upper-box">
+    <div class="add-button">
+      <button mat-raised-button color="primary"  (click)="addEmployeeRedirect()">Add Employee</button>
+      <button class="logout-button" mat-raised-button color="success"  (click)="logout()">Logout</button>
+    </div>
+
+    <div class="firstname-input-form">
+      <form class="example-form">
+        <mat-form-field class="example-full-width">
+          <mat-label>Search By First Name</mat-label>
+          <input type="text"
+                 placeholder="Enter First Name"
+                 aria-label="First Name"
+                 matInput
+                 [(ngModel)]="firstName"
+                 name="firstName"
+                 (input)="searchByFirsName(firstName)">
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+<mat-card class="mat-card-data upper-box">
+  <mat-card-header class="mat-card-header-data">
+    <h3>Employee Data</h3>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="mat-elevation-z8">
+      <ul>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Emp No</th>
+              <th>Birth Date</th>
+              <th>Firstname</th>
+              <th>Lastname</th>
+              <th>Gender</th>
+              <th>Hire Date</th>
+              <th>Delete</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of empData">
+              <td>{{emp.emp_no}}</td>
+              <td>{{emp.birth_date | date}}</td>
+              <td>{{emp.first_name}}</td>
+              <td>{{emp.last_name}}</td>
+              <td>{{emp.gender}}</td>
+              <td>{{emp.hire_date | date}}</td>
+              <td>
+                <button mat-flat-button color="success" (click)="deleteEmployee(emp.emp_no)">Delete</button>
+              </td>
+              <td>
+                <button mat-flat-button color="success" (click)="updateEmployee(emp.emp_no)">Edit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ul>
+      <div class="has-text-centered">
+        <mat-paginator [length]="total" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+          (page)="handlePageEvent($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,43 @@
+<mat-card class="mat-card">
+    <mat-card-header>Sign Up Form</mat-card-header>
+    <mat-card-content>
+        
+        <form [formGroup]="myForm" (ngSubmit)="submitForm()" novalidate>
+      
+            <mat-form-field class="full-width-field">
+              <input matInput placeholder="Name" formControlName="name">
+              <div *ngIf="myForm.get('name').invalid && myForm.get('name').errors && (myForm.get('name').dirty || myForm.get('name').touched)">
+                <small class="text-danger" *ngIf="myForm.get('name').hasError('required')"> This field is required.</small> 
+              </div>
+            </mat-form-field>
+      
+            <mat-form-field class="full-width-field">
+              <input matInput placeholder="Email" formControlName="email">
+              <div *ngIf="myForm.get('email').invalid && myForm.get('email').errors && (myForm.get('email').dirty || myForm.get('email').touched)">
+                <small class="text-danger" *ngIf="myForm.get('email').hasError('required')"> This field is required.</small> 
+                <small class="text-danger" *ngIf="myForm.get('email').hasError('email')"> This field must be email format.</small> 
+              </div>
+            </mat-form-field>
+
+            <mat-form-field class="full-width-field">
+                <input type="password" matInput placeholder="Password" formControlName="password">
+                <div *ngIf="myForm.get('password').invalid && myForm.get('password').errors && (myForm.get('password').dirty || myForm.get('password').touched)">
+                    <small class="text-danger" *ngIf="myForm.get('password').hasError('required')"> This field is required.</small> 
+                    <small class="text-danger" *ngIf="myForm.get('password').hasError('minlength')"> Mininum length should be 8 characters.</small> 
+                </div>
+            </mat-form-field>
+
+            <mat-form-field class="full-width-field">
+                <input type="password" matInput placeholder="Confirm Password" formControlName="confirmPassword">
+                <div *ngIf="myForm.get('password').invalid && myForm.get('password').errors && (myForm.get('password').dirty || myForm.get('password').touched)">
+                    <small class="text-danger" *ngIf="myForm.get('password').hasError('required')"> This field is required.</small> 
+                    <small class="text-danger" *ngIf="myForm.get('password').hasError('minlength')"> Mininum length should be 4 characters.</small> 
+                </div>
+            </mat-form-field>
+
+            <div class="button-wrapper">
+                <button mat-flat-button color="primary"  [disabled]="!myForm.valid">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

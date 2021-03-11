@@ -1,0 +1,30 @@
+<mat-card>
+    <mat-card-header>Login Form</mat-card-header>
+    <mat-card-content>
+        
+        <form [formGroup]="loginForm" (ngSubmit)="loginMethod()" novalidate>
+            <mat-form-field class="full-width-field">
+              <input matInput placeholder="Email" formControlName="email">
+              <div *ngIf="loginForm.get('email').invalid && loginForm.get('email').errors && (loginForm.get('email').dirty || loginForm.get('email').touched)">
+                <small class="text-danger" *ngIf="loginForm.get('email').hasError('required')"> This field is required.</small> 
+                <small class="text-danger" *ngIf="loginForm.get('email').hasError('email')"> This field must be email format.</small> 
+              </div>
+            </mat-form-field>
+
+            <mat-form-field class="full-width-field">
+                <input type="password" matInput placeholder="Password" formControlName="password">
+                <div *ngIf="loginForm.get('password').invalid && loginForm.get('password').errors && (loginForm.get('password').dirty || loginForm.get('password').touched)">
+                    <small class="text-danger" *ngIf="loginForm.get('password').hasError('required')"> This field is required.</small> 
+                    <small class="text-danger" *ngIf="loginForm.get('password').hasError('minlength')"> Mininum length should be 4 characters.</small> 
+                </div>
+            </mat-form-field>
+
+         
+
+            <div class="button-wrapper">
+                <button mat-flat-button color="primary"  [disabled]="!loginForm.valid">Submit</button>
+            </div>
+        </form>
+
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,60 @@
+<mat-card class="mat-card">
+    <mat-card-header>Add Employee Form</mat-card-header>
+    <mat-card-content>
+        
+        <form [formGroup]="myForm" (ngSubmit)="addEmployee()" novalidate>
+      
+            <mat-form-field class="full-width-field">
+              <input type="number" readonly="editMode" matInput placeholder="Employee Number" formControlName="emp_no">
+              <div *ngIf="myForm.get('emp_no').invalid && myForm.get('emp_no').errors && (myForm.get('emp_no').dirty || myForm.get('emp_no').touched)">
+                <small class="text-danger" *ngIf="myForm.get('emp_no').hasError('required')"> This field is required.</small> 
+              </div>
+            </mat-form-field>
+
+            <mat-form-field class="full-width-field">
+                <input matInput placeholder="First name" formControlName="first_name">
+                <div *ngIf="myForm.get('first_name').invalid && myForm.get('first_name').errors && (myForm.get('first_name').dirty || myForm.get('first_name').touched)">
+                  <small class="text-danger" *ngIf="myForm.get('first_name').hasError('required')"> This field is required.</small> 
+                </div>
+              </mat-form-field>
+
+              <mat-form-field class="full-width-field">
+                <input matInput placeholder="Last name" formControlName="last_name">
+                <div *ngIf="myForm.get('last_name').invalid && myForm.get('last_name').errors && (myForm.get('last_name').dirty || myForm.get('last_name').touched)">
+                  <small class="text-danger" *ngIf="myForm.get('last_name').hasError('required')"> This field is required.</small> 
+                </div>
+              </mat-form-field>
+
+              <div class="full-width-field">
+                <input type="radio" value="M" formControlName="gender" >Male
+                <input type="radio" value="F" formControlName="gender">Female
+                <div *ngIf="myForm.get('gender').invalid && myForm.get('gender').errors && (myForm.get('gender').dirty || myForm.get('gender').touched)">
+                    <small class="text-danger" *ngIf="myForm.get('gender').hasError('required')"> This field is required.</small> 
+                  </div></div>
+
+                  <mat-form-field  class="full-width-field">
+                    <input
+                    matInput
+                    [matDatepicker]="birth_date"
+                    formControlName="birth_date"
+                    >
+                <mat-datepicker-toggle matSuffix [for]="birth_date"></mat-datepicker-toggle>
+                <mat-datepicker #birth_date></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field  class="full-width-field">
+                <input
+                matInput
+                [matDatepicker]="hire_date"
+                formControlName="hire_date"
+                >
+            <mat-datepicker-toggle matSuffix [for]="hire_date"></mat-datepicker-toggle>
+            <mat-datepicker #hire_date></mat-datepicker>
+        </mat-form-field>
+
+            <div class="button-wrapper">
+                <button mat-flat-button color="primary"  [disabled]="!myForm.valid">Submit</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
