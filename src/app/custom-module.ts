@@ -12,6 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ToastrModule } from 'ngx-toastr';
 
 
 
@@ -31,7 +32,8 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatPaginatorModule,
         NgxPaginationModule,
         MatDialogModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        ToastrModule
     ],
     exports:[
         MatInputModule,
@@ -46,7 +48,8 @@ import { MatNativeDateModule } from '@angular/material/core';
         MatTableModule,
         MatPaginatorModule,
         NgxPaginationModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        ToastrModule
     ],
     providers: []
 })

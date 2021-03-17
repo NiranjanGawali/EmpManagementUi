@@ -1,7 +1,12 @@
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
+@Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
+  constructor(public toasterService: ToastrService) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request)
       .pipe(
@@ -18,8 +23,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           console.log(errorMsg);
           console.log('NIRA');
           var errMsg = null;
-          console.log(error.error.message);
-          if(error.error.message) {
+          if(error?.error?.message) {
             errMsg = error.error.message;
           } else if(error.error.err) {
             errMsg = error.error.err;
@@ -31,7 +35,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             errMsg = 'Something went wrong!!';
           }
           
-          alert(errMsg);
+          this.toasterService.error(errMsg);
+          // alert(errMsg);
           return throwError(errorMsg);
         })
       )

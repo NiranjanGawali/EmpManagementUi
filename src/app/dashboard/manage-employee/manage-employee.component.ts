@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { DashboardService } from '../dashboard.service';
 
 @Component({
@@ -15,8 +16,10 @@ export class ManageEmployeeComponent implements OnInit {
   empData: any = null;
   editMode:boolean = false;
 
+  @ViewChild('formDirective') private formDirective: NgForm;
+
   constructor(public fb: FormBuilder,public datepipe: DatePipe,private dashService:DashboardService,
-    private router: Router,private route: ActivatedRoute) { }
+    private router: Router,private route: ActivatedRoute,private toastr:ToastrService) { }
 
   ngOnInit(): void {
     this.reactiveForm();
@@ -26,11 +29,15 @@ export class ManageEmployeeComponent implements OnInit {
   async checkEmpNoExists() {
     if (this.route.snapshot.queryParams['empNo']) {
      let empNum = this.route.snapshot.queryParams['empNo'];
-     console.log('EDIT MODE => ',empNum);
      this.editMode = true;
+     console.log('EDIT MODE => ',this.editMode);
       this.empData = await this.getEmployeeDataByEmpNo(parseInt(empNum));
       console.log(this.empData);
       this.reactiveEditForm(this.empData);
+    } else {
+      console.log('INSERT MODE');
+      console.log(this.editMode);
+      
     }
   }
 
@@ -57,7 +64,7 @@ export class ManageEmployeeComponent implements OnInit {
     });
   }
 
-  addEmployee() {
+  addEmployee(form:NgForm) {
     console.log('In Add Employee....');
     console.log(this.myForm.value);
     let birthDate = this.myForm.value.birth_date;
@@ -76,8 +83,8 @@ export class ManageEmployeeComponent implements OnInit {
         console.log(res);
         if(res.status) {
           console.log('User Updated successfully!!!');     
-          this.router.navigate(['/dashboard/main'])
-  
+          this.toastr.success('Employee Updated successfully!!!');
+          // this.router.navigate(['/dashboard/main']);
         } 
       }, err => {
         console.log('ERROR LOGGG');      
@@ -88,9 +95,9 @@ export class ManageEmployeeComponent implements OnInit {
       this.dashService.addEmployee(payload).subscribe(res => {      
         console.log(res);
         if(res.status) {
-          console.log('User Signup successfully!!!');     
-          this.router.navigate(['/dashboard/main'])
-  
+          console.log('Employee Added successfully!!!');     
+          this.toastr.success('Employee Added successfully!!!');
+          form.resetForm();
         } 
       }, err => {
         console.log('ERROR LOGGG');      
@@ -124,6 +131,10 @@ export class ManageEmployeeComponent implements OnInit {
       return console.error(err);
 
     }
+  }
+
+  goToListEmployees() {
+              this.router.navigate(['/dashboard/main']);
   }
 
 }

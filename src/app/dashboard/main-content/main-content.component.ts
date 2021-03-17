@@ -8,6 +8,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
+import { MainService } from 'src/app/main.service';
 
 @Component({
   selector: 'app-main-content',
@@ -24,10 +26,11 @@ export class MainContentComponent implements OnInit {
   myControl = new FormControl();
 
   constructor(private dashService: DashboardService, private router: Router, private route: ActivatedRoute,
-    private spinner: NgxSpinnerService) { }
+    private spinner: NgxSpinnerService,private toastr: ToastrService,private mainService: MainService) { }
 
   // dataSource = ELEMENT_DATA;
   async ngOnInit() {
+    this.mainService.checkIfUserLoggedIn();
     this.empData = await this.getAllEmployee(1);
     console.log(this.empData);
   }
@@ -100,6 +103,7 @@ export class MainContentComponent implements OnInit {
 
   // Add Employee
   addEmployeeRedirect() {
+    // this.toastr.success('NIRANJAN');
     this.router.navigate(['/dashboard/manage-employee']);
   }
 
@@ -129,6 +133,11 @@ export class MainContentComponent implements OnInit {
   logout() {
     localStorage.clear();
     this.router.navigate(['/']);
+  }
+
+  async emptySearchField() {
+    this.firstName = '';
+    await this.getAllEmployee(this.page);
   }
 
 }

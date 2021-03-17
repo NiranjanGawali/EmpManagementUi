@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MainService } from 'src/app/main.service';
 import { AuthServiceService } from '../auth-service.service';
 
 @Component({
@@ -12,9 +13,11 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor(public fb: FormBuilder, private authService: AuthServiceService,private router:Router) { }
+  constructor(public fb: FormBuilder, private authService: AuthServiceService,private router:Router,
+    private mainService: MainService) { }
   ngOnInit(): void {
     this.loginReactiveForm();
+    this.mainService.checkIfUserLoggedIn();
   }
 
   loginReactiveForm() {
@@ -35,7 +38,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('userData',JSON.stringify(res.data));
         localStorage.setItem('token',JSON.stringify(res.data.token));
         
-        this.router.navigate(['/dashboard/main'])
+        this.router.navigate(['/dashboard/main']);
       }
     }, err => {
       return console.log(err);

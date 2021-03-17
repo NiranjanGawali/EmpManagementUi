@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { map } from 'rxjs/operators';
 import { AuthServiceService } from '../auth-service.service';
 
@@ -13,7 +14,8 @@ export class SignupComponent implements OnInit {
 
   myForm: FormGroup;
 
-  constructor(public fb: FormBuilder,private authService: AuthServiceService,private router: Router) {}
+  constructor(public fb: FormBuilder,private authService: AuthServiceService,private router: Router,
+    private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.reactiveForm();
@@ -33,8 +35,9 @@ export class SignupComponent implements OnInit {
     console.log(this.myForm.value);
     let payload = this.myForm.value;
     if(payload.password != payload.confirmPassword) {
-       alert('Password and Confirm password fiedls should be same!!!!');
-      return this.myForm.reset();
+      this.toastr.warning('Password and Confirm password fiedls should be same!!!!');
+      //  alert('Password and Confirm password fiedls should be same!!!!');
+      // return this.myForm.reset();
     }
 
     this.authService.signupUser(payload).subscribe(res => {
@@ -44,12 +47,15 @@ export class SignupComponent implements OnInit {
       if(res.status) {
         console.log('User Signup successfully!!!');     
         // this.myForm.reset();
-        this.router.navigate(['auth/login'])
+        this.toastr.success('User Registered Successfully!!!');
+        setTimeout(() => {
+          this.router.navigate(['auth/login'])
+        }, 1500);
 
       } 
     }, err => {
       console.log('ERROR LOGGG');      
-      this.myForm.reset();
+      // this.myForm.reset();
       console.log(err);
     });
 

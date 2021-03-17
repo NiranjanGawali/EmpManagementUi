@@ -12,6 +12,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS, JsonpInterceptor } from '@angular/common/http';
 import { HttpErrorInterceptor } from './../common/httperrorinterceptor.service';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { ToastrModule } from 'ngx-toastr';
+import { MainService } from './main.service';
 
 @NgModule({
   declarations: [
@@ -27,9 +29,12 @@ import { NgxSpinnerModule } from "ngx-spinner";
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    ToastrModule.forRoot({
+      positionClass :'toast-top-right'
+    })
   ],
-  providers: [
+  providers: [MainService,
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor,multi : true },
   ],
   bootstrap: [AppComponent],
