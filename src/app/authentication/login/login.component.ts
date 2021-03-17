@@ -45,5 +45,10 @@ export class LoginComponent implements OnInit {
     });
 
   }
+
+  gotoSignupPage() {
+    this.router.navigate(['/auth/signup']);
+  }
+
 }
 

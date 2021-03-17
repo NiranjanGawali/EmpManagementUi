@@ -1,12 +1,13 @@
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  constructor(public toasterService: ToastrService) {}
+  constructor(public toasterService: ToastrService,private router:Router) {}
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request)
       .pipe(
@@ -18,14 +19,15 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
           else {
             console.log('this is server side error');
-            errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
+            if(error.status)
+              errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
           }
           console.log(errorMsg);
           console.log('NIRA');
           var errMsg = null;
           if(error?.error?.message) {
             errMsg = error.error.message;
-          } else if(error.error.err) {
+          } else if(error?.error?.err) {
             errMsg = error.error.err;
           } else {
             errMsg = errorMsg;
@@ -34,8 +36,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           if(errMsg == undefined) {
             errMsg = 'Something went wrong!!';
           }
+          var finalERR = null;
+          if(typeof errMsg == 'object') {
+            errMsg = errMsg.message;
+          }
           
+          if(errMsg)
           this.toasterService.error(errMsg);
+
+          if(errMsg === 'Token is expired!!') {
+            setTimeout(() => {
+              localStorage.clear();
+              this.router.navigate(['/auth/login']);
+            }, 2000);        
+          }
           // alert(errMsg);
           return throwError(errorMsg);
         })

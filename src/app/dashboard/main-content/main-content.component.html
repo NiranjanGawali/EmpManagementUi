@@ -8,16 +8,16 @@
     <div class="firstname-input-form">
       <form class="example-form">
         <mat-form-field class="example-full-width">
-          <mat-label>Search By First Name</mat-label>
+          <mat-label>Search By Firstname or emp number</mat-label>
           <input type="text"
-                 placeholder="Enter First Name"
+                 placeholder="Enter First Name or employee number"
                  aria-label="First Name"
                  matInput
                  [(ngModel)]="firstName"
                  name="firstName"
                  (input)="searchByFirsName(firstName)">
         </mat-form-field>
-        <button mat-raised-button (click)="emptySearchField()" class="success">Remove</button>
+        <button title="clear text" mat-raised-button (click)="emptySearchField()" class="success">X</button>
       </form>
     </div>
   </mat-card-content>
@@ -62,11 +62,11 @@
           </tbody>
         </table>
         <div class="dataNotFound">
-          <span *ngIf="empData.length == 0">No Data Found</span>
+          <span *ngIf="empData?.length == 0">No Data Found</span>
         </div>
       </ul>
       <div class="has-text-centered">
-        <mat-paginator [length]="total" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"
+        <mat-paginator [length]="total" [pageSize]="10" [pageSizeOptions]="[10]"
           (page)="handlePageEvent($event)">
         </mat-paginator>
       </div>

@@ -1,5 +1,5 @@
 <mat-card class="mat-card">
-    <mat-card-header>Add Employee Form</mat-card-header>
+    <mat-card-header>{{formName}}</mat-card-header>
     <mat-card-content>
         
         <form #f="ngForm" [formGroup]="myForm" (ngSubmit)="addEmployee(f)" novalidate>

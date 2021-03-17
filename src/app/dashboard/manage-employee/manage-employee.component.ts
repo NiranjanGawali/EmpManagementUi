@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { DashboardService } from '../dashboard.service';
 
@@ -15,11 +16,13 @@ export class ManageEmployeeComponent implements OnInit {
   myForm: FormGroup;
   empData: any = null;
   editMode:boolean = false;
+  formName: String = null;
 
   @ViewChild('formDirective') private formDirective: NgForm;
 
   constructor(public fb: FormBuilder,public datepipe: DatePipe,private dashService:DashboardService,
-    private router: Router,private route: ActivatedRoute,private toastr:ToastrService) { }
+    private router: Router,private route: ActivatedRoute,private toastr:ToastrService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {
     this.reactiveForm();
@@ -27,17 +30,22 @@ export class ManageEmployeeComponent implements OnInit {
   }
 
   async checkEmpNoExists() {
+    this.spinner.show();
     if (this.route.snapshot.queryParams['empNo']) {
      let empNum = this.route.snapshot.queryParams['empNo'];
      this.editMode = true;
      console.log('EDIT MODE => ',this.editMode);
       this.empData = await this.getEmployeeDataByEmpNo(parseInt(empNum));
       console.log(this.empData);
+      this.formName = 'Edit Employee';
       this.reactiveEditForm(this.empData);
+      this.spinner.hide();
     } else {
+      this.formName = 'Add Employee';
       console.log('INSERT MODE');
       console.log(this.editMode);
-      
+      this.spinner.hide();
+
     }
   }
 
@@ -87,7 +95,6 @@ export class ManageEmployeeComponent implements OnInit {
           // this.router.navigate(['/dashboard/main']);
         } 
       }, err => {
-        console.log('ERROR LOGGG');      
         this.myForm.reset();
         console.log(err);
       });  
@@ -101,7 +108,7 @@ export class ManageEmployeeComponent implements OnInit {
         } 
       }, err => {
         console.log('ERROR LOGGG');      
-        this.myForm.reset();
+        // form.resetForm();
         console.log(err);
       });
     }    
@@ -115,7 +122,7 @@ export class ManageEmployeeComponent implements OnInit {
       let promData = new Promise(async (resolve, reject) => {
         await this.dashService.getEmployeeDataByEmpNo(empNo).subscribe(res => {
           if (res.status) {
-            this.empData = res.data.data[0];
+            this.empData = res.data[0];
             console.log('EMP DATA');
             resolve(this.empData);
           }

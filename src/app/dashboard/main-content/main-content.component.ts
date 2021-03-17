@@ -24,6 +24,7 @@ export class MainContentComponent implements OnInit {
   firstName: String = '';
   empData: any = [];
   myControl = new FormControl();
+  dataAvailableStatus = '';
 
   constructor(private dashService: DashboardService, private router: Router, private route: ActivatedRoute,
     private spinner: NgxSpinnerService,private toastr: ToastrService,private mainService: MainService) { }
@@ -49,10 +50,13 @@ export class MainContentComponent implements OnInit {
     try {
       let promData = new Promise(async (resolve, reject) => {
         await this.dashService.getEmployeeData(pageNo).subscribe(res => {
+          console.log('MAIN log');
+          console.log(res);
+          
           if (res.status) {
-            this.empData = res.data.data;
+            this.empData = res.data;
             console.log('EMP DATA');
-            this.total = res.data.count;
+            this.total = res.count;
             console.log(this.empData);
             this.spinner.hide();
             resolve(this.empData);
@@ -83,6 +87,7 @@ export class MainContentComponent implements OnInit {
           if (res.status) {
             console.log('DELETE operation done');
             this.empData = await this.getAllEmployee(1);
+            this.toastr.success(res.message);
             console.log(res);
           }
         }, err => {
@@ -113,9 +118,9 @@ export class MainContentComponent implements OnInit {
       let promData = new Promise(async (resolve, reject) => {
         await this.dashService.getEmployeeDataByFirstName(searchVal,this.page).subscribe(res => {
           if (res.status) {
-            this.empData = res.data.data;
+            this.empData = res.data;
             console.log('EMP DATA');
-            this.total = res.data.count;
+            this.total = res.data;
             console.log(this.empData);
             this.spinner.hide();
             resolve(this.empData);
@@ -131,8 +136,11 @@ export class MainContentComponent implements OnInit {
   }
 
   logout() {
-    localStorage.clear();
-    this.router.navigate(['/']);
+    let result = confirm("Are you sure want to logout?");
+    if(result) {
+      localStorage.clear();
+      this.router.navigate(['/']);
+    }  
   }
 
   async emptySearchField() {
